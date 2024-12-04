@@ -4,6 +4,8 @@
  */
 package Pages;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Alaa1
@@ -26,42 +28,180 @@ public class AdminHome extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        AdminUI = new javax.swing.JPanel();
+        TopNav = new javax.swing.JPanel();
+        Header = new javax.swing.JLabel();
+        signout_btn = new javax.swing.JButton();
+        SideBar = new javax.swing.JPanel();
+        employees_btn = new javax.swing.JButton();
+        users_btn = new javax.swing.JButton();
+        rooms_btn = new javax.swing.JButton();
+        customers_btn = new javax.swing.JButton();
+        reservations_btn = new javax.swing.JButton();
+        Main = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1130, 720));
         getContentPane().setLayout(null);
 
-        jPanel1.setBackground(new java.awt.Color(248, 246, 227));
+        AdminUI.setBackground(new java.awt.Color(248, 246, 227));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(58, 79, 65));
-        jLabel1.setText("HOTEL : ADMIN HOME");
+        TopNav.setBackground(new java.awt.Color(58, 79, 65));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        Header.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        Header.setForeground(new java.awt.Color(248, 246, 227));
+        Header.setText("HOTEL : ADMIN HOME");
+
+        signout_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        signout_btn.setForeground(new java.awt.Color(58, 79, 65));
+        signout_btn.setText("SignOut");
+        signout_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                signout_btnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout TopNavLayout = new javax.swing.GroupLayout(TopNav);
+        TopNav.setLayout(TopNavLayout);
+        TopNavLayout.setHorizontalGroup(
+            TopNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TopNavLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(Header, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 552, Short.MAX_VALUE)
+                .addComponent(signout_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37))
+        );
+        TopNavLayout.setVerticalGroup(
+            TopNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TopNavLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(566, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(666, Short.MAX_VALUE))
+                .addComponent(signout_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TopNavLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Header)
+                .addContainerGap())
         );
 
-        getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 1130, 720);
+        SideBar.setBackground(new java.awt.Color(58, 79, 65));
+
+        employees_btn.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        employees_btn.setForeground(new java.awt.Color(248, 246, 227));
+        employees_btn.setText("Employees");
+        employees_btn.setBorderPainted(false);
+        employees_btn.setContentAreaFilled(false);
+        employees_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        employees_btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        users_btn.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        users_btn.setForeground(new java.awt.Color(248, 246, 227));
+        users_btn.setText("Users");
+        users_btn.setBorderPainted(false);
+        users_btn.setContentAreaFilled(false);
+        users_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        users_btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        users_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                users_btnActionPerformed(evt);
+            }
+        });
+
+        rooms_btn.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        rooms_btn.setForeground(new java.awt.Color(248, 246, 227));
+        rooms_btn.setText("Rooms");
+        rooms_btn.setBorderPainted(false);
+        rooms_btn.setContentAreaFilled(false);
+        rooms_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rooms_btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        customers_btn.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        customers_btn.setForeground(new java.awt.Color(248, 246, 227));
+        customers_btn.setText("Customers");
+        customers_btn.setBorderPainted(false);
+        customers_btn.setContentAreaFilled(false);
+        customers_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        customers_btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        reservations_btn.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        reservations_btn.setForeground(new java.awt.Color(248, 246, 227));
+        reservations_btn.setText("Reservations");
+        reservations_btn.setBorderPainted(false);
+        reservations_btn.setContentAreaFilled(false);
+        reservations_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        reservations_btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        javax.swing.GroupLayout SideBarLayout = new javax.swing.GroupLayout(SideBar);
+        SideBar.setLayout(SideBarLayout);
+        SideBarLayout.setHorizontalGroup(
+            SideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SideBarLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(SideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(reservations_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(customers_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rooms_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(users_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(employees_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+        SideBarLayout.setVerticalGroup(
+            SideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SideBarLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(employees_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(users_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(rooms_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(customers_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(reservations_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(354, Short.MAX_VALUE))
+        );
+
+        Main.setBackground(new java.awt.Color(248, 246, 227));
+        Main.setLayout(new java.awt.CardLayout());
+
+        javax.swing.GroupLayout AdminUILayout = new javax.swing.GroupLayout(AdminUI);
+        AdminUI.setLayout(AdminUILayout);
+        AdminUILayout.setHorizontalGroup(
+            AdminUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(TopNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(AdminUILayout.createSequentialGroup()
+                .addComponent(SideBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(Main, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        AdminUILayout.setVerticalGroup(
+            AdminUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(AdminUILayout.createSequentialGroup()
+                .addComponent(TopNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addGroup(AdminUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(SideBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Main, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+
+        getContentPane().add(AdminUI);
+        AdminUI.setBounds(0, 0, 1130, 720);
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void users_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_users_btnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_users_btnActionPerformed
+
+    private void signout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signout_btnActionPerformed
+        int response = JOptionPane.showConfirmDialog(this, "Are you sure?", "SIGN OUT", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            dispose();
+            new SignIn().setVisible(true);
+        }
+    }//GEN-LAST:event_signout_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -99,7 +239,16 @@ public class AdminHome extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel AdminUI;
+    private javax.swing.JLabel Header;
+    private javax.swing.JPanel Main;
+    private javax.swing.JPanel SideBar;
+    private javax.swing.JPanel TopNav;
+    private javax.swing.JButton customers_btn;
+    private javax.swing.JButton employees_btn;
+    private javax.swing.JButton reservations_btn;
+    private javax.swing.JButton rooms_btn;
+    private javax.swing.JButton signout_btn;
+    private javax.swing.JButton users_btn;
     // End of variables declaration//GEN-END:variables
 }
