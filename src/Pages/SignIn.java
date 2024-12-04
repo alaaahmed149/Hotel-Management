@@ -150,6 +150,9 @@ public class SignIn extends javax.swing.JFrame {
                     if (result.getString("role").equals("admin")) {
                         dispose();
                         new AdminHome().setVisible(true);
+                    } else {
+                        dispose();
+                        new UserHome().setVisible(true);
                     }
                 }
                 result.close();
