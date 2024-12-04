@@ -5,19 +5,12 @@
 package Pages;
 
 import Database.DatabaseConnection;
+import Pages.AddPages.AddEmployee;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Alaa1
- */
 public class AdminHome extends javax.swing.JFrame {
-
-    /**
-     * Creates new form AdminHome
-     */
     public AdminHome() {
         initComponents();
     }
@@ -412,20 +405,22 @@ public class AdminHome extends javax.swing.JFrame {
         users_pageLayout.setHorizontalGroup(
             users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(users_pageLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(users_pageLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
-                        .addComponent(search_field1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 798, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(search_field1, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(users_pageLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 786, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addGroup(users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(delete_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(edit_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(add_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(search_btn1))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         users_pageLayout.setVerticalGroup(
             users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -512,15 +507,33 @@ public class AdminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_search_empActionPerformed
 
     private void add_empActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_empActionPerformed
-        
+        dispose();
+        new AddEmployee().setVisible(true);
     }//GEN-LAST:event_add_empActionPerformed
 
     private void edit_empActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_empActionPerformed
-        // TODO add your handling code here:
+        int selectedRow = employees_table.getSelectedRow();
+        if (selectedRow != -1) {
+            int id = (Integer) employees_table.getValueAt(selectedRow, 0);
+            dispose();
+            new AddEmployee(id).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a row to edit.");
+        }
     }//GEN-LAST:event_edit_empActionPerformed
 
     private void delete_empActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_empActionPerformed
-        // TODO add your handling code here:
+        int selectedRow = employees_table.getSelectedRow();
+        if (selectedRow != -1) {
+            int pk = (Integer) employees_table.getValueAt(selectedRow, 0);
+            int response = JOptionPane.showConfirmDialog(this, "Are you sure?", "Delete record", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.YES_OPTION) {
+                deleteRow("employees", "employee_id", pk);
+                employees_table.setModel(loadTableData("employees"));
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a row to delete.");
+        }
     }//GEN-LAST:event_delete_empActionPerformed
 
     private void employees_tableComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_employees_tableComponentShown
@@ -569,6 +582,7 @@ public class AdminHome extends javax.swing.JFrame {
                 }
                 model.addRow(row);
             }
+            stmt.close();
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
         }
@@ -593,10 +607,29 @@ public class AdminHome extends javax.swing.JFrame {
                 }
                 model.addRow(row);
             }
+            stmt.close();
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
         }
         return model;
+    }
+
+    private void deleteRow(String table_name, String column, int prk) {
+        String query = "DELETE FROM " + table_name + " WHERE " + column + " = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, prk);
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(this, "Record has been deleted.");
+                revalidate();
+                repaint();
+            } else {
+                JOptionPane.showMessageDialog(this, "Something went wrong, please try again.");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
     }
 
     public static void main(String args[]) {
