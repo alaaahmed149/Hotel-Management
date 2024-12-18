@@ -1,4 +1,3 @@
-
 package Pages.AddPages;
 
 import Database.DatabaseConnection;
@@ -7,11 +6,11 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class AddRoom extends javax.swing.JFrame {
+
     private int id = -1;
-    
-    
+
     public AddRoom() {
-     initComponents();
+        initComponents();
     }
 
     public AddRoom(int id) {
@@ -20,7 +19,7 @@ public class AddRoom extends javax.swing.JFrame {
         loadData();
     }
     Connection connection = DatabaseConnection.getConnection();
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -88,17 +87,19 @@ public class AddRoom extends javax.swing.JFrame {
             }
         });
 
-        roomType_field.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "single", "double", "suite" }));
+        roomType_field.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Single", "Double", "Suite" }));
         roomType_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 roomType_fieldActionPerformed(evt);
             }
         });
 
-        status_field.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "avallable", "occupied" }));
+        status_field.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Occupied" }));
 
+        addRoom_btn.setBackground(new java.awt.Color(58, 79, 65));
         addRoom_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        addRoom_btn.setText("Add room");
+        addRoom_btn.setForeground(new java.awt.Color(248, 246, 227));
+        addRoom_btn.setText("Done");
         addRoom_btn.setMaximumSize(new java.awt.Dimension(77, 29));
         addRoom_btn.setMinimumSize(new java.awt.Dimension(77, 29));
         addRoom_btn.setPreferredSize(new java.awt.Dimension(77, 29));
@@ -135,7 +136,7 @@ public class AddRoom extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(price_field, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                             .addComponent(status_field, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,9 +186,10 @@ public class AddRoom extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void avallable_fieldActionPerformed(java.awt.event.ActionEvent evt) {                                               
+    private void avallable_fieldActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    } 
+    }
+
     private void loadData() {
         String query = "SELECT * FROM rooms WHERE room_id = " + id;
         try {
@@ -203,22 +205,18 @@ public class AddRoom extends javax.swing.JFrame {
             System.out.println("Error: " + ex.getMessage());
         }
     }
-                    
+
     private void cancelRoom_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelRoom_btnActionPerformed
         dispose();
         new AdminHome().setVisible(true);
     }//GEN-LAST:event_cancelRoom_btnActionPerformed
- 
-  private void roomID_fieldActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }   
+
     private void addRoom_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoom_btnActionPerformed
-        String room_id= roomID_field.getText();
-        String room_type = roomType_field.getSelectedItem().toString();
+        String room_id = roomID_field.getText();
+        String room_type = roomType_field.getSelectedItem().toString().toLowerCase();
         String price = price_field.getText();
-        String status = status_field.getSelectedItem().toString();
-        
-        
+        String status = status_field.getSelectedItem().toString().toLowerCase();
+
         String query;
         if (id == -1) {
             query = "INSERT INTO rooms (room_id, room_type, price, status) VALUES (?, ?, ?, ?)";
@@ -245,7 +243,7 @@ public class AddRoom extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
         }
-                                           
+
 
     }//GEN-LAST:event_addRoom_btnActionPerformed
 

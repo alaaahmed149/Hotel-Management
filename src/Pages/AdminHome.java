@@ -10,10 +10,47 @@ import Pages.AddPages.AddRoom;
 import Pages.AddPages.AddCustomer;
 import Pages.AddPages.AddReservation;
 import java.sql.*;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
+
+class RoomsTableRenderer extends DefaultTableCellRenderer {
+
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        // Get the default rendering component
+        Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        // Softer colors with custom RGB values
+        Color softRed = new Color(255, 102, 102); // Light Red
+        Color softGreen = new Color(102, 255, 102); // Light Green
+        // Check if the column is the "Status" column
+        int statusColumnIndex = 3;
+        if (column == statusColumnIndex) {
+            String status = (String) value;
+
+            // Change the background color based on the status
+            if ("occupied".equalsIgnoreCase(status)) {
+                cell.setBackground(softRed);
+                cell.setForeground(Color.WHITE);
+            } else if ("available".equalsIgnoreCase(status)) {
+                cell.setBackground(softGreen);
+                cell.setForeground(Color.BLACK);
+            } else {
+                cell.setBackground(Color.WHITE);
+                cell.setForeground(Color.BLACK);
+            }
+        } else {
+            cell.setBackground(Color.WHITE);
+            cell.setForeground(Color.BLACK);
+        }
+
+        return cell;
+    }
+}
 
 public class AdminHome extends javax.swing.JFrame {
+
     public AdminHome() {
         initComponents();
     }
@@ -37,6 +74,17 @@ public class AdminHome extends javax.swing.JFrame {
         reservations_btn = new javax.swing.JButton();
         Main = new javax.swing.JPanel();
         Welcome = new javax.swing.JPanel();
+        dashboard_header = new javax.swing.JLabel();
+        emp_dashboard = new javax.swing.JButton();
+        use_dashboard = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        rooms_dashboard = new javax.swing.JButton();
+        cust_dashboard = new javax.swing.JButton();
+        reser_dashboard = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         employees_page = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         search_field = new javax.swing.JTextField();
@@ -48,11 +96,11 @@ public class AdminHome extends javax.swing.JFrame {
         delete_emp = new javax.swing.JButton();
         users_page = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        search_btn1 = new javax.swing.JButton();
+        search_user_btn = new javax.swing.JButton();
         search_field1 = new javax.swing.JTextField();
-        add_btn1 = new javax.swing.JButton();
-        edit_btn1 = new javax.swing.JButton();
-        delete_btn1 = new javax.swing.JButton();
+        add_user_btn = new javax.swing.JButton();
+        edit_user_btn = new javax.swing.JButton();
+        delete_user_btn = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         users_table = new javax.swing.JTable();
         rooms_page = new javax.swing.JPanel();
@@ -97,7 +145,13 @@ public class AdminHome extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("HOTEL | ADMIN HOME");
         setMinimumSize(new java.awt.Dimension(1130, 720));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         getContentPane().setLayout(null);
 
         AdminUI.setBackground(new java.awt.Color(248, 246, 227));
@@ -106,11 +160,20 @@ public class AdminHome extends javax.swing.JFrame {
 
         Header.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         Header.setForeground(new java.awt.Color(248, 246, 227));
-        Header.setText("HOTEL : ADMIN HOME");
+        Header.setText("HOTEL | ADMIN HOME");
+        Header.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Header.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                HeaderMouseClicked(evt);
+            }
+        });
 
+        signout_btn.setBackground(new java.awt.Color(248, 246, 227));
         signout_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         signout_btn.setForeground(new java.awt.Color(58, 79, 65));
+        signout_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logout.png"))); // NOI18N
         signout_btn.setText("SignOut");
+        signout_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         signout_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 signout_btnActionPerformed(evt);
@@ -144,7 +207,8 @@ public class AdminHome extends javax.swing.JFrame {
 
         employees_btn.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         employees_btn.setForeground(new java.awt.Color(248, 246, 227));
-        employees_btn.setText("Employees");
+        employees_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/employee.png"))); // NOI18N
+        employees_btn.setText(" Employees");
         employees_btn.setBorderPainted(false);
         employees_btn.setContentAreaFilled(false);
         employees_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -157,7 +221,8 @@ public class AdminHome extends javax.swing.JFrame {
 
         users_btn.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         users_btn.setForeground(new java.awt.Color(248, 246, 227));
-        users_btn.setText("Users");
+        users_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/team.png"))); // NOI18N
+        users_btn.setText(" Users");
         users_btn.setBorderPainted(false);
         users_btn.setContentAreaFilled(false);
         users_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -170,7 +235,8 @@ public class AdminHome extends javax.swing.JFrame {
 
         rooms_btn.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         rooms_btn.setForeground(new java.awt.Color(248, 246, 227));
-        rooms_btn.setText("Rooms");
+        rooms_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/rooms.png"))); // NOI18N
+        rooms_btn.setText(" Rooms");
         rooms_btn.setBorderPainted(false);
         rooms_btn.setContentAreaFilled(false);
         rooms_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -183,7 +249,8 @@ public class AdminHome extends javax.swing.JFrame {
 
         customers_btn.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         customers_btn.setForeground(new java.awt.Color(248, 246, 227));
-        customers_btn.setText("Customers");
+        customers_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/customers.png"))); // NOI18N
+        customers_btn.setText(" Customers");
         customers_btn.setBorderPainted(false);
         customers_btn.setContentAreaFilled(false);
         customers_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -196,7 +263,8 @@ public class AdminHome extends javax.swing.JFrame {
 
         reservations_btn.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         reservations_btn.setForeground(new java.awt.Color(248, 246, 227));
-        reservations_btn.setText("Reservations");
+        reservations_btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/reservations.png"))); // NOI18N
+        reservations_btn.setText(" Reservations");
         reservations_btn.setBorderPainted(false);
         reservations_btn.setContentAreaFilled(false);
         reservations_btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -212,14 +280,14 @@ public class AdminHome extends javax.swing.JFrame {
         SideBarLayout.setHorizontalGroup(
             SideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(SideBarLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addContainerGap()
                 .addGroup(SideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(reservations_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(customers_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rooms_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(users_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(employees_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         SideBarLayout.setVerticalGroup(
             SideBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,16 +309,149 @@ public class AdminHome extends javax.swing.JFrame {
         Main.setLayout(new java.awt.CardLayout());
 
         Welcome.setBackground(new java.awt.Color(248, 246, 227));
+        Welcome.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                WelcomeComponentShown(evt);
+            }
+        });
+
+        dashboard_header.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        dashboard_header.setForeground(new java.awt.Color(58, 79, 65));
+        dashboard_header.setText("Dashboard");
+
+        emp_dashboard.setBackground(new java.awt.Color(248, 246, 227));
+        emp_dashboard.setFont(new java.awt.Font("Segoe UI", 1, 50)); // NOI18N
+        emp_dashboard.setForeground(new java.awt.Color(58, 79, 65));
+        emp_dashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/division (1).png"))); // NOI18N
+        emp_dashboard.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        emp_dashboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                emp_dashboardActionPerformed(evt);
+            }
+        });
+
+        use_dashboard.setBackground(new java.awt.Color(248, 246, 227));
+        use_dashboard.setFont(new java.awt.Font("Segoe UI", 1, 50)); // NOI18N
+        use_dashboard.setForeground(new java.awt.Color(58, 79, 65));
+        use_dashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/manager.png"))); // NOI18N
+        use_dashboard.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        use_dashboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                use_dashboardActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(58, 79, 65));
+        jLabel5.setText("Employees");
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(58, 79, 65));
+        jLabel6.setText("Users");
+
+        rooms_dashboard.setBackground(new java.awt.Color(248, 246, 227));
+        rooms_dashboard.setFont(new java.awt.Font("Segoe UI", 1, 50)); // NOI18N
+        rooms_dashboard.setForeground(new java.awt.Color(58, 79, 65));
+        rooms_dashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/bedroom.png"))); // NOI18N
+        rooms_dashboard.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rooms_dashboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rooms_dashboardActionPerformed(evt);
+            }
+        });
+
+        cust_dashboard.setBackground(new java.awt.Color(248, 246, 227));
+        cust_dashboard.setFont(new java.awt.Font("Segoe UI", 1, 50)); // NOI18N
+        cust_dashboard.setForeground(new java.awt.Color(58, 79, 65));
+        cust_dashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/tourist.png"))); // NOI18N
+        cust_dashboard.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cust_dashboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cust_dashboardActionPerformed(evt);
+            }
+        });
+
+        reser_dashboard.setBackground(new java.awt.Color(248, 246, 227));
+        reser_dashboard.setFont(new java.awt.Font("Segoe UI", 1, 50)); // NOI18N
+        reser_dashboard.setForeground(new java.awt.Color(58, 79, 65));
+        reser_dashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/schedule.png"))); // NOI18N
+        reser_dashboard.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        reser_dashboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reser_dashboardActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(58, 79, 65));
+        jLabel7.setText("Rooms");
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(58, 79, 65));
+        jLabel8.setText("Customers");
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(58, 79, 65));
+        jLabel9.setText("Reservations");
 
         javax.swing.GroupLayout WelcomeLayout = new javax.swing.GroupLayout(Welcome);
         Welcome.setLayout(WelcomeLayout);
         WelcomeLayout.setHorizontalGroup(
             WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 917, Short.MAX_VALUE)
+            .addGroup(WelcomeLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dashboard_header, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, WelcomeLayout.createSequentialGroup()
+                            .addGroup(WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(emp_dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel5))
+                            .addGap(33, 33, 33)
+                            .addGroup(WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6)
+                                .addComponent(use_dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, WelcomeLayout.createSequentialGroup()
+                            .addGroup(WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(WelcomeLayout.createSequentialGroup()
+                                    .addComponent(rooms_dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(45, 45, 45))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, WelcomeLayout.createSequentialGroup()
+                                    .addComponent(jLabel7)
+                                    .addGap(236, 236, 236)))
+                            .addGroup(WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(cust_dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel8))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel9)
+                                .addComponent(reser_dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         WelcomeLayout.setVerticalGroup(
             WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 662, Short.MAX_VALUE)
+            .addGroup(WelcomeLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(dashboard_header, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(emp_dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(use_dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rooms_dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cust_dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(reser_dashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(85, Short.MAX_VALUE))
         );
 
         Main.add(Welcome, "card4");
@@ -340,11 +541,11 @@ public class AdminHome extends javax.swing.JFrame {
             employees_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(employees_pageLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(employees_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(employees_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(employees_pageLayout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(search_field, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(employees_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -352,7 +553,7 @@ public class AdminHome extends javax.swing.JFrame {
                     .addComponent(add_emp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(edit_emp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(delete_emp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         employees_pageLayout.setVerticalGroup(
             employees_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -363,18 +564,18 @@ public class AdminHome extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(employees_pageLayout.createSequentialGroup()
                         .addGap(16, 16, 16)
-                        .addGroup(employees_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(employees_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(search_field, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(search_emp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(search_emp, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(employees_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(employees_pageLayout.createSequentialGroup()
                         .addComponent(add_emp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(edit_emp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(delete_emp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(delete_emp, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
 
@@ -392,50 +593,50 @@ public class AdminHome extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(58, 79, 65));
         jLabel2.setText("Users Page");
 
-        search_btn1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        search_btn1.setForeground(new java.awt.Color(58, 79, 65));
-        search_btn1.setText("Search");
-        search_btn1.addActionListener(new java.awt.event.ActionListener() {
+        search_user_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        search_user_btn.setForeground(new java.awt.Color(58, 79, 65));
+        search_user_btn.setText("Search");
+        search_user_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                search_btn1ActionPerformed(evt);
+                search_user_btnActionPerformed(evt);
             }
         });
 
         search_field1.setText("Search ..");
 
-        add_btn1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        add_btn1.setForeground(new java.awt.Color(58, 79, 65));
-        add_btn1.setText("Add");
-        add_btn1.setMaximumSize(new java.awt.Dimension(76, 27));
-        add_btn1.setMinimumSize(new java.awt.Dimension(76, 27));
-        add_btn1.setPreferredSize(new java.awt.Dimension(76, 27));
-        add_btn1.addActionListener(new java.awt.event.ActionListener() {
+        add_user_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        add_user_btn.setForeground(new java.awt.Color(58, 79, 65));
+        add_user_btn.setText("Add");
+        add_user_btn.setMaximumSize(new java.awt.Dimension(76, 27));
+        add_user_btn.setMinimumSize(new java.awt.Dimension(76, 27));
+        add_user_btn.setPreferredSize(new java.awt.Dimension(76, 27));
+        add_user_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                add_btn1ActionPerformed(evt);
+                add_user_btnActionPerformed(evt);
             }
         });
 
-        edit_btn1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        edit_btn1.setForeground(new java.awt.Color(58, 79, 65));
-        edit_btn1.setText("Edit");
-        edit_btn1.setMaximumSize(new java.awt.Dimension(76, 27));
-        edit_btn1.setMinimumSize(new java.awt.Dimension(76, 27));
-        edit_btn1.setPreferredSize(new java.awt.Dimension(76, 27));
-        edit_btn1.addActionListener(new java.awt.event.ActionListener() {
+        edit_user_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        edit_user_btn.setForeground(new java.awt.Color(58, 79, 65));
+        edit_user_btn.setText("Edit");
+        edit_user_btn.setMaximumSize(new java.awt.Dimension(76, 27));
+        edit_user_btn.setMinimumSize(new java.awt.Dimension(76, 27));
+        edit_user_btn.setPreferredSize(new java.awt.Dimension(76, 27));
+        edit_user_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edit_btn1ActionPerformed(evt);
+                edit_user_btnActionPerformed(evt);
             }
         });
 
-        delete_btn1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        delete_btn1.setForeground(new java.awt.Color(58, 79, 65));
-        delete_btn1.setText("Delete");
-        delete_btn1.setMaximumSize(new java.awt.Dimension(76, 27));
-        delete_btn1.setMinimumSize(new java.awt.Dimension(76, 27));
-        delete_btn1.setPreferredSize(new java.awt.Dimension(76, 27));
-        delete_btn1.addActionListener(new java.awt.event.ActionListener() {
+        delete_user_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        delete_user_btn.setForeground(new java.awt.Color(58, 79, 65));
+        delete_user_btn.setText("Delete");
+        delete_user_btn.setMaximumSize(new java.awt.Dimension(76, 27));
+        delete_user_btn.setMinimumSize(new java.awt.Dimension(76, 27));
+        delete_user_btn.setPreferredSize(new java.awt.Dimension(76, 27));
+        delete_user_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                delete_btn1ActionPerformed(evt);
+                delete_user_btnActionPerformed(evt);
             }
         });
 
@@ -447,6 +648,7 @@ public class AdminHome extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        users_table.setPreferredSize(new java.awt.Dimension(375, 0));
         users_table.setRowHeight(25);
         jScrollPane3.setViewportView(users_table);
 
@@ -455,22 +657,20 @@ public class AdminHome extends javax.swing.JFrame {
         users_pageLayout.setHorizontalGroup(
             users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(users_pageLayout.createSequentialGroup()
-                .addGroup(users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(users_pageLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
-                        .addComponent(search_field1, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(users_pageLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 786, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                        .addGap(32, 32, 32)
+                        .addComponent(search_field1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(delete_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(edit_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(add_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(search_btn1))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addComponent(delete_user_btn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(edit_user_btn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(add_user_btn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(search_user_btn))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         users_pageLayout.setVerticalGroup(
             users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -481,19 +681,20 @@ public class AdminHome extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(users_pageLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(search_field1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(search_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(search_field1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(users_pageLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(search_user_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(users_pageLayout.createSequentialGroup()
-                        .addComponent(add_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(add_user_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(edit_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(edit_user_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(delete_btn1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(33, Short.MAX_VALUE))
+                        .addComponent(delete_user_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
 
         Main.add(users_page, "card3");
@@ -514,9 +715,10 @@ public class AdminHome extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Room Number", "Bed Type", "Price", "Avallable"
+                "Room Number", "Type", "Price", "Status"
             }
         ));
+        rooms_table.setRowHeight(25);
         jScrollPane2.setViewportView(rooms_table);
 
         add_room.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -559,46 +761,45 @@ public class AdminHome extends javax.swing.JFrame {
             rooms_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(rooms_pageLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(rooms_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(rooms_pageLayout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(search_field_room, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(rooms_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(rooms_pageLayout.createSequentialGroup()
-                        .addComponent(search_room)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                        .addComponent(search_field_room, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2))
+                .addGroup(rooms_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(rooms_pageLayout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(search_room))
+                    .addGroup(rooms_pageLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addGroup(rooms_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(edit_room, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(delete_room, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(add_room, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(28, Short.MAX_VALUE))))
+                            .addComponent(add_room, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(delete_room, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(33, 33, 33))
         );
         rooms_pageLayout.setVerticalGroup(
             rooms_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(rooms_pageLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(rooms_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rooms_pageLayout.createSequentialGroup()
-                        .addGroup(rooms_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(search_field_room, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(search_room, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(23, 23, 23))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(rooms_pageLayout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)))
+                        .addGap(7, 7, 7)
+                        .addGroup(rooms_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(search_room, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(search_field_room, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(rooms_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(rooms_pageLayout.createSequentialGroup()
                         .addComponent(add_room, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(19, 19, 19)
                         .addComponent(edit_room, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(delete_room, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         Main.add(rooms_page, "card5");
@@ -693,11 +894,11 @@ public class AdminHome extends javax.swing.JFrame {
             customers_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(customers_pageLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(customers_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(customers_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(customers_pageLayout.createSequentialGroup()
                         .addComponent(customer_page, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(search_field_customer, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(customers_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -705,7 +906,7 @@ public class AdminHome extends javax.swing.JFrame {
                     .addComponent(add_cust, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(edit_cust, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(delete_cust, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         customers_pageLayout.setVerticalGroup(
             customers_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -721,14 +922,14 @@ public class AdminHome extends javax.swing.JFrame {
                             .addComponent(search_cust, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(customers_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(customers_pageLayout.createSequentialGroup()
                         .addComponent(add_cust, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(edit_cust, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(delete_cust, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(36, Short.MAX_VALUE))
+                        .addComponent(delete_cust, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         Main.add(customers_page, "card6");
@@ -822,43 +1023,42 @@ public class AdminHome extends javax.swing.JFrame {
         reservation_pageLayout.setHorizontalGroup(
             reservation_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(reservation_pageLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(reservation_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addContainerGap()
+                .addGroup(reservation_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(reservation_pageLayout.createSequentialGroup()
-                        .addComponent(customer_page1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(search_field_reservations, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 792, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(customer_page1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(search_field_reservations, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(reservation_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(search_reser)
                     .addComponent(add_reser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(edit_reser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(delete_reser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         reservation_pageLayout.setVerticalGroup(
             reservation_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(reservation_pageLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
                 .addGroup(reservation_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(customer_page1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(reservation_pageLayout.createSequentialGroup()
-                        .addGap(26, 26, 26)
+                        .addGap(8, 8, 8)
                         .addGroup(reservation_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(search_field_reservations, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(search_reser, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(reservation_pageLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(customer_page1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(search_reser, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(search_field_reservations, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(reservation_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(reservation_pageLayout.createSequentialGroup()
                         .addComponent(add_reser, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(edit_reser, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(delete_reser, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(36, Short.MAX_VALUE))
+                        .addComponent(delete_reser, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         Main.add(reservation_page, "card7");
@@ -960,21 +1160,21 @@ public class AdminHome extends javax.swing.JFrame {
         employees_table.setModel(loadTableData("employees"));
     }//GEN-LAST:event_employees_pageComponentShown
 
-    private void search_btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_btn1ActionPerformed
+    private void search_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_user_btnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_search_btn1ActionPerformed
+    }//GEN-LAST:event_search_user_btnActionPerformed
 
-    private void add_btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_btn1ActionPerformed
+    private void add_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_user_btnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_add_btn1ActionPerformed
+    }//GEN-LAST:event_add_user_btnActionPerformed
 
-    private void edit_btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_btn1ActionPerformed
+    private void edit_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_user_btnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_edit_btn1ActionPerformed
+    }//GEN-LAST:event_edit_user_btnActionPerformed
 
-    private void delete_btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_btn1ActionPerformed
+    private void delete_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_user_btnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_delete_btn1ActionPerformed
+    }//GEN-LAST:event_delete_user_btnActionPerformed
 
     private void users_pageComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_users_pageComponentShown
         users_table.setModel(loadTableData("users"));
@@ -989,6 +1189,18 @@ public class AdminHome extends javax.swing.JFrame {
 
     private void rooms_pageComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_rooms_pageComponentShown
         rooms_table.setModel(loadTableData("rooms"));
+        try {
+            String updateStatus = "UPDATE rooms SET status = 'available' WHERE room_id NOT IN (SELECT DISTINCT room_id FROM reservations)";
+            PreparedStatement updateStmt = connection.prepareStatement(updateStatus);
+            int result = updateStmt.executeUpdate();
+            if (result > 0) {
+                rooms_table.setModel(loadTableData("rooms"));
+                rooms_table.getColumnModel().getColumn(3).setCellRenderer(new RoomsTableRenderer());
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+        rooms_table.getColumnModel().getColumn(3).setCellRenderer(new RoomsTableRenderer());
     }//GEN-LAST:event_rooms_pageComponentShown
 
     private void add_roomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_roomActionPerformed
@@ -997,14 +1209,12 @@ public class AdminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_add_roomActionPerformed
 
     private void search_roomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_roomActionPerformed
-
-         String search_value = search_field_room.getText();
-         rooms_table.setModel(getSearchResult(search_value, "rooms", "room_type"));
+        String search_value = search_field_room.getText();
+        rooms_table.setModel(getSearchResult(search_value, "rooms", "room_type"));
     }//GEN-LAST:event_search_roomActionPerformed
 
     private void delete_roomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_roomActionPerformed
-
-          int selectedRow = rooms_table.getSelectedRow();
+        int selectedRow = rooms_table.getSelectedRow();
         if (selectedRow != -1) {
             int pk = (Integer) rooms_table.getValueAt(selectedRow, 0);
             int response = JOptionPane.showConfirmDialog(this, "Are you sure?", "Delete record", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -1027,13 +1237,13 @@ public class AdminHome extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please select a row to edit.");
         }
     }//GEN-LAST:event_edit_roomActionPerformed
-    
+
     private void search_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_fieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_search_fieldActionPerformed
 
     private void delete_custActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_custActionPerformed
-         int selectedRow = customers_table.getSelectedRow();
+        int selectedRow = customers_table.getSelectedRow();
         if (selectedRow != -1) {
             int pk = (Integer) customers_table.getValueAt(selectedRow, 0);
             int response = JOptionPane.showConfirmDialog(this, "Are you sure?", "Delete record", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -1051,8 +1261,8 @@ public class AdminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_search_field_customerActionPerformed
 
     private void search_custActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_custActionPerformed
-         String search_value = search_field_customer.getText();
-         customers_table.setModel(getSearchResult(search_value, "customers", "name"));
+        String search_value = search_field_customer.getText();
+        customers_table.setModel(getSearchResult(search_value, "customers", "name"));
     }//GEN-LAST:event_search_custActionPerformed
 
     private void customers_tableComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_customers_tableComponentShown
@@ -1060,12 +1270,12 @@ public class AdminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_customers_tableComponentShown
 
     private void add_custActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_custActionPerformed
-         dispose();
+        dispose();
         new AddCustomer().setVisible(true);
     }//GEN-LAST:event_add_custActionPerformed
 
     private void edit_custActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_custActionPerformed
-         int selectedRow = customers_table.getSelectedRow();
+        int selectedRow = customers_table.getSelectedRow();
         if (selectedRow != -1) {
             int id = (Integer) customers_table.getValueAt(selectedRow, 0);
             dispose();
@@ -1083,7 +1293,7 @@ public class AdminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_customers_btnActionPerformed
 
     private void customer_pageComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_customer_pageComponentShown
-       
+
     }//GEN-LAST:event_customer_pageComponentShown
 
     private void customers_pageComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_customers_pageComponentShown
@@ -1091,27 +1301,40 @@ public class AdminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_customers_pageComponentShown
 
     private void delete_reserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_reserActionPerformed
-         int selectedRow = reservations_table1.getSelectedRow();
+        int selectedRow = reservations_table1.getSelectedRow();
         if (selectedRow != -1) {
             int pk = (Integer) reservations_table1.getValueAt(selectedRow, 0);
             int response = JOptionPane.showConfirmDialog(this, "Are you sure?", "Delete record", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (response == JOptionPane.YES_OPTION) {
-                deleteRow("reservations", "reservation_id", pk);
+                deleteRow("reservations", "reservations_id", pk);
+                try {
+                    String room_id = reservations_table1.getValueAt(selectedRow, 2).toString();
+                    String updateStatus = "UPDATE rooms SET status = 'available' WHERE room_id = ?";
+                    PreparedStatement updateStmt = connection.prepareStatement(updateStatus);
+                    updateStmt.setString(1, room_id);
+                    int result = updateStmt.executeUpdate();
+                    if (result > 0) {
+                        rooms_table.setModel(loadTableData("rooms"));
+                        rooms_table.getColumnModel().getColumn(3).setCellRenderer(new RoomsTableRenderer());
+                    }
+                } catch (SQLException ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
                 reservations_table1.setModel(loadTableData("reservations"));
             }
         } else {
             JOptionPane.showMessageDialog(this, "Please select a row to delete.");
         }
-    
+
     }//GEN-LAST:event_delete_reserActionPerformed
 
     private void search_field_reservationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_field_reservationsActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_search_field_reservationsActionPerformed
 
     private void search_reserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_reserActionPerformed
-      String search_value = search_field_reservations.getText();
-      reservations_table1.setModel(getSearchResult(search_value, "reservations", "reservation_id"));
+        String search_value = search_field_reservations.getText();
+        reservations_table1.setModel(getSearchResult(search_value, "reservations", "reservation_id"));
     }//GEN-LAST:event_search_reserActionPerformed
 
     private void reservations_table1ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_reservations_table1ComponentShown
@@ -1119,23 +1342,22 @@ public class AdminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_reservations_table1ComponentShown
 
     private void add_reserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_reserActionPerformed
-       dispose();
+        dispose();
         new AddReservation().setVisible(true);
     }//GEN-LAST:event_add_reserActionPerformed
 
     private void edit_reserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_reserActionPerformed
-         int selectedRow = reservations_table1.getSelectedRow();
+        int selectedRow = reservations_table1.getSelectedRow();
         if (selectedRow != -1) {
             int id = (Integer) reservations_table1.getValueAt(selectedRow, 0);
             dispose();
-           new AddReservation(id).setVisible(true);
+            new AddReservation(id).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Please select a row to edit.");
         }
     }//GEN-LAST:event_edit_reserActionPerformed
 
     private void customer_page1ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_customer_page1ComponentShown
-        // TODO add your handling code here:
     }//GEN-LAST:event_customer_page1ComponentShown
 
     private void reservations_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reservations_btnActionPerformed
@@ -1146,12 +1368,82 @@ public class AdminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_reservations_btnActionPerformed
 
     private void reservation_pageComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_reservation_pageComponentShown
-       reservations_table1.setModel(loadTableData("reservations"));
+        reservations_table1.setModel(loadTableData("reservations"));
     }//GEN-LAST:event_reservation_pageComponentShown
-    
-    private void rooms_tableComponentShown(java.awt.event.ComponentEvent evt) {                                               
-        
-    }   
+
+    private void WelcomeComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_WelcomeComponentShown
+
+    }//GEN-LAST:event_WelcomeComponentShown
+
+    private void HeaderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HeaderMouseClicked
+        Main.removeAll();
+        Main.add(Welcome);
+        Main.repaint();
+        Main.revalidate();
+    }//GEN-LAST:event_HeaderMouseClicked
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        int countEmployees = countRows("employees", "employee_id");
+        emp_dashboard.setText(String.valueOf(countEmployees));
+        int countUsers = countRows("users", "user_id");
+        use_dashboard.setText(String.valueOf(countUsers));
+        int countRooms = countRows("rooms", "room_id");
+        rooms_dashboard.setText(String.valueOf(countRooms));
+        int countCustomers = countRows("customers", "customer_id");
+        cust_dashboard.setText(String.valueOf(countCustomers));
+        int countReservations = countRows("reservations", "reservations_id");
+        reser_dashboard.setText(String.valueOf(countReservations));
+    }//GEN-LAST:event_formComponentShown
+
+    private void emp_dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emp_dashboardActionPerformed
+        Main.removeAll();
+        Main.add(employees_page);
+        Main.repaint();
+        Main.revalidate();
+    }//GEN-LAST:event_emp_dashboardActionPerformed
+
+    private void use_dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_use_dashboardActionPerformed
+        Main.removeAll();
+        Main.add(users_page);
+        Main.repaint();
+        Main.revalidate();
+    }//GEN-LAST:event_use_dashboardActionPerformed
+
+    private void rooms_dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rooms_dashboardActionPerformed
+        Main.removeAll();
+        Main.add(rooms_page);
+        Main.repaint();
+        Main.revalidate();
+    }//GEN-LAST:event_rooms_dashboardActionPerformed
+
+    private void cust_dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cust_dashboardActionPerformed
+        Main.removeAll();
+        Main.add(customers_page);
+        Main.repaint();
+        Main.revalidate();
+    }//GEN-LAST:event_cust_dashboardActionPerformed
+
+    private void reser_dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reser_dashboardActionPerformed
+        Main.removeAll();
+        Main.add(reservation_page);
+        Main.repaint();
+        Main.revalidate();
+    }//GEN-LAST:event_reser_dashboardActionPerformed
+
+    private int countRows(String table_name, String pk) {
+        int count = 0;
+        try {
+            String query = "SELECT COUNT(" + pk + ") AS result FROM " + table_name;
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            count = rs.getInt("result");
+        } catch (SQLException ex) {
+            System.out.println("Error in fetching count: " + ex.getMessage());
+        }
+        return count;
+    }
+
     private DefaultTableModel loadTableData(String table_name) {
         String query = "SELECT * FROM " + table_name;
         DefaultTableModel model = new DefaultTableModel();
@@ -1259,45 +1551,54 @@ public class AdminHome extends javax.swing.JFrame {
     private javax.swing.JPanel SideBar;
     private javax.swing.JPanel TopNav;
     private javax.swing.JPanel Welcome;
-    private javax.swing.JButton add_btn1;
     private javax.swing.JButton add_cust;
     private javax.swing.JButton add_emp;
     private javax.swing.JButton add_reser;
     private javax.swing.JButton add_room;
+    private javax.swing.JButton add_user_btn;
+    private javax.swing.JButton cust_dashboard;
     private javax.swing.JLabel customer_page;
     private javax.swing.JLabel customer_page1;
     private javax.swing.JButton customers_btn;
     private javax.swing.JPanel customers_page;
     private javax.swing.JTable customers_table;
-    private javax.swing.JButton delete_btn1;
+    private javax.swing.JLabel dashboard_header;
     private javax.swing.JButton delete_cust;
     private javax.swing.JButton delete_emp;
     private javax.swing.JButton delete_reser;
     private javax.swing.JButton delete_room;
-    private javax.swing.JButton edit_btn1;
+    private javax.swing.JButton delete_user_btn;
     private javax.swing.JButton edit_cust;
     private javax.swing.JButton edit_emp;
     private javax.swing.JButton edit_reser;
     private javax.swing.JButton edit_room;
+    private javax.swing.JButton edit_user_btn;
+    private javax.swing.JButton emp_dashboard;
     private javax.swing.JButton employees_btn;
     private javax.swing.JPanel employees_page;
     private javax.swing.JTable employees_table;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JButton reser_dashboard;
     private javax.swing.JPanel reservation_page;
     private javax.swing.JButton reservations_btn;
     private javax.swing.JTable reservations_table1;
     private javax.swing.JButton rooms_btn;
+    private javax.swing.JButton rooms_dashboard;
     private javax.swing.JPanel rooms_page;
     private javax.swing.JTable rooms_table;
-    private javax.swing.JButton search_btn1;
     private javax.swing.JButton search_cust;
     private javax.swing.JButton search_emp;
     private javax.swing.JTextField search_field;
@@ -1307,7 +1608,9 @@ public class AdminHome extends javax.swing.JFrame {
     private javax.swing.JTextField search_field_room;
     private javax.swing.JButton search_reser;
     private javax.swing.JButton search_room;
+    private javax.swing.JButton search_user_btn;
     private javax.swing.JButton signout_btn;
+    private javax.swing.JButton use_dashboard;
     private javax.swing.JButton users_btn;
     private javax.swing.JPanel users_page;
     private javax.swing.JTable users_table;

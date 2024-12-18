@@ -25,8 +25,8 @@ public class UserHome extends javax.swing.JFrame {
     public UserHome() {
         initComponents();
     }
-   Connection connection = DatabaseConnection.getConnection();
-   
+    Connection connection = DatabaseConnection.getConnection();
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -41,6 +41,13 @@ public class UserHome extends javax.swing.JFrame {
         reservations_btn = new javax.swing.JButton();
         Main = new javax.swing.JPanel();
         Welcome = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        rooms_dashboard = new javax.swing.JButton();
+        cust_dashboard = new javax.swing.JButton();
+        reser_dashboard = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
         rooms_page = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -61,7 +68,13 @@ public class UserHome extends javax.swing.JFrame {
         delete_cust = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("HOTEL | USER HOME");
         setMinimumSize(new java.awt.Dimension(1130, 720));
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         getContentPane().setLayout(null);
 
         AdminUI.setBackground(new java.awt.Color(248, 246, 227));
@@ -71,7 +84,13 @@ public class UserHome extends javax.swing.JFrame {
 
         Header.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         Header.setForeground(new java.awt.Color(248, 246, 227));
-        Header.setText("HOTEL : USER HOME");
+        Header.setText("HOTEL | USER HOME");
+        Header.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Header.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                HeaderMouseClicked(evt);
+            }
+        });
 
         signout_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         signout_btn.setForeground(new java.awt.Color(58, 79, 65));
@@ -173,7 +192,47 @@ public class UserHome extends javax.swing.JFrame {
         Main.setLayout(new java.awt.CardLayout());
 
         Welcome.setBackground(new java.awt.Color(248, 246, 227));
-        Welcome.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        Welcome.setLayout(null);
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(58, 79, 65));
+        jLabel4.setText("Dashboard");
+        Welcome.add(jLabel4);
+        jLabel4.setBounds(10, 10, 300, 48);
+
+        rooms_dashboard.setFont(new java.awt.Font("Segoe UI", 1, 50)); // NOI18N
+        rooms_dashboard.setForeground(new java.awt.Color(58, 79, 65));
+        Welcome.add(rooms_dashboard);
+        rooms_dashboard.setBounds(20, 70, 408, 208);
+
+        cust_dashboard.setFont(new java.awt.Font("Segoe UI", 1, 50)); // NOI18N
+        cust_dashboard.setForeground(new java.awt.Color(58, 79, 65));
+        Welcome.add(cust_dashboard);
+        cust_dashboard.setBounds(460, 70, 408, 208);
+
+        reser_dashboard.setFont(new java.awt.Font("Segoe UI", 1, 50)); // NOI18N
+        reser_dashboard.setForeground(new java.awt.Color(58, 79, 65));
+        Welcome.add(reser_dashboard);
+        reser_dashboard.setBounds(20, 320, 408, 208);
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(58, 79, 65));
+        jLabel7.setText("Rooms");
+        Welcome.add(jLabel7);
+        jLabel7.setBounds(20, 290, 200, 25);
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(58, 79, 65));
+        jLabel8.setText("Customers");
+        Welcome.add(jLabel8);
+        jLabel8.setBounds(460, 290, 190, 25);
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(58, 79, 65));
+        jLabel9.setText("Reservations");
+        Welcome.add(jLabel9);
+        jLabel9.setBounds(20, 540, 109, 25);
+
         Main.add(Welcome, "card2");
 
         rooms_page.setBackground(new java.awt.Color(248, 246, 227));
@@ -510,7 +569,7 @@ public class UserHome extends javax.swing.JFrame {
         if (selectedRow != -1) {
             int id = (Integer) customers_table.getValueAt(selectedRow, 0);
             dispose();
-               new AddCustomer(id).setVisible(true);
+            new AddCustomer(id).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Please select a row to edit.");
         }
@@ -531,17 +590,48 @@ public class UserHome extends javax.swing.JFrame {
     }//GEN-LAST:event_delete_custActionPerformed
 
     private void rooms_pageComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_rooms_pageComponentShown
-         rooms_table.setModel(loadTableData("rooms"));
+        rooms_table.setModel(loadTableData("rooms"));
     }//GEN-LAST:event_rooms_pageComponentShown
 
     private void customers_pageComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_customers_pageComponentShown
-         customers_table.setModel(loadTableData("customers"));
+        customers_table.setModel(loadTableData("customers"));
     }//GEN-LAST:event_customers_pageComponentShown
 
     private void rooms_tableComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_rooms_tableComponentShown
         // TODO add your handling code here:
     }//GEN-LAST:event_rooms_tableComponentShown
-private DefaultTableModel loadTableData(String table_name) {
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        int countRooms = countRows("rooms", "room_id");
+        rooms_dashboard.setText(String.valueOf(countRooms));
+        int countCustomers = countRows("customers", "customer_id");
+        cust_dashboard.setText(String.valueOf(countCustomers));
+        int countReservations = countRows("reservations", "reservations_id");
+        reser_dashboard.setText(String.valueOf(countReservations));
+    }//GEN-LAST:event_formComponentShown
+
+    private void HeaderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HeaderMouseClicked
+        Main.removeAll();
+        Main.add(Welcome);
+        Main.repaint();
+        Main.revalidate();
+    }//GEN-LAST:event_HeaderMouseClicked
+
+    private int countRows(String table_name, String pk) {
+        int count = 0;
+        try {
+            String query = "SELECT COUNT(" + pk + ") AS result FROM " + table_name;
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            count = rs.getInt("result");
+        } catch (SQLException ex) {
+            System.out.println("Error in fetching count: " + ex.getMessage());
+        }
+        return count;
+    }
+
+    private DefaultTableModel loadTableData(String table_name) {
         String query = "SELECT * FROM " + table_name;
         DefaultTableModel model = new DefaultTableModel();
         try {
@@ -565,7 +655,8 @@ private DefaultTableModel loadTableData(String table_name) {
         }
         return model;
     }
-   private DefaultTableModel getSearchResult(String search_val, String table_name, String column) {
+
+    private DefaultTableModel getSearchResult(String search_val, String table_name, String column) {
         String query = "SELECT * FROM " + table_name + " WHERE " + column + " LIKE '%" + search_val + "%'";
         DefaultTableModel model = new DefaultTableModel();
         try {
@@ -589,6 +680,7 @@ private DefaultTableModel loadTableData(String table_name) {
         }
         return model;
     }
+
     private void deleteRow(String table_name, String column, int prk) {
         String query = "DELETE FROM " + table_name + " WHERE " + column + " = ?";
         try {
@@ -606,6 +698,7 @@ private DefaultTableModel loadTableData(String table_name) {
             System.out.println("Error: " + ex.getMessage());
         }
     }
+
     /**
      * @param args the command line arguments
      */
@@ -650,6 +743,7 @@ private DefaultTableModel loadTableData(String table_name) {
     private javax.swing.JPanel Welcome;
     private javax.swing.JButton add_cust;
     private javax.swing.JButton add_room;
+    private javax.swing.JButton cust_dashboard;
     private javax.swing.JLabel customer_page;
     private javax.swing.JButton customers_btn;
     private javax.swing.JPanel customers_page;
@@ -659,10 +753,16 @@ private DefaultTableModel loadTableData(String table_name) {
     private javax.swing.JButton edit_cust;
     private javax.swing.JButton edit_room;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JButton reser_dashboard;
     private javax.swing.JButton reservations_btn;
     private javax.swing.JButton rooms_btn;
+    private javax.swing.JButton rooms_dashboard;
     private javax.swing.JPanel rooms_page;
     private javax.swing.JTable rooms_table;
     private javax.swing.JButton search_cust;

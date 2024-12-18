@@ -125,7 +125,7 @@
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace pref="68" max="32767" attributes="0"/>
+                  <EmptySpace pref="66" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -220,9 +220,9 @@
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="3">
-                <StringItem index="0" value="single"/>
-                <StringItem index="1" value="double"/>
-                <StringItem index="2" value="suite"/>
+                <StringItem index="0" value="Single"/>
+                <StringItem index="1" value="Double"/>
+                <StringItem index="2" value="Suite"/>
               </StringArray>
             </Property>
           </Properties>
@@ -237,8 +237,8 @@
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="2">
-                <StringItem index="0" value="avallable"/>
-                <StringItem index="1" value="occupied"/>
+                <StringItem index="0" value="Available"/>
+                <StringItem index="1" value="Occupied"/>
               </StringArray>
             </Property>
           </Properties>
@@ -248,10 +248,16 @@
         </Component>
         <Component class="javax.swing.JButton" name="addRoom_btn">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="41" green="4f" red="3a" type="rgb"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Add room"/>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="e3" green="f6" red="f8" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Done"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[77, 29]"/>
             </Property>
