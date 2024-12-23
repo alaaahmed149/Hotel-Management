@@ -877,7 +877,7 @@
                               <Group type="102" attributes="0">
                                   <Component id="jLabel2" min="-2" pref="286" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                  <Component id="search_field1" min="-2" pref="480" max="-2" attributes="0"/>
+                                  <Component id="user_search" min="-2" pref="480" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jScrollPane3" max="32767" attributes="0"/>
                           </Group>
@@ -902,7 +902,7 @@
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                  <Component id="search_field1" min="-2" pref="36" max="-2" attributes="0"/>
+                                  <Component id="user_search" min="-2" pref="36" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
@@ -951,7 +951,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="search_user_btnActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JTextField" name="search_field1">
+                <Component class="javax.swing.JTextField" name="user_search">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Search .."/>
                   </Properties>

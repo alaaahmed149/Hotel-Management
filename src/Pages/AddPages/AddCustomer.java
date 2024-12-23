@@ -1,22 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Pages.AddPages;
 
 import Database.DatabaseConnection;
 import Pages.AdminHome;
+import Pages.UserHome;
 import java.sql.*;
 import javax.swing.JOptionPane;
 public class AddCustomer extends javax.swing.JFrame {
-   private int id = -1;
-
+    private int id = -1;
+    private boolean isAdmin = false;
     
+    public AddCustomer(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+        initComponents();
+    }
     public AddCustomer() {
         initComponents();
     }
-    public AddCustomer(int id) {
+    public AddCustomer(boolean isAdmin, int id) {
+        this.isAdmin = isAdmin;
         initComponents();
         this.id = id;
         loadData();
@@ -180,7 +181,6 @@ public class AddCustomer extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelCustomer_btnActionPerformed
 
     private void AddCustomer_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddCustomer_btnActionPerformed
-       
         String name = name_field.getText();
         String phone = phone_field1.getText();
         String email = email_field2.getText();
@@ -201,10 +201,15 @@ public class AddCustomer extends javax.swing.JFrame {
 
             if (rowsInserted > 0) {
                 JOptionPane.showMessageDialog(this, "Customer added successfully!");
-                dispose();
-                new AdminHome().setVisible(true);
+                if (isAdmin) {
+                    dispose();
+                    new AdminHome().setVisible(true);
+                } else {
+                    dispose();
+                    new UserHome().setVisible(true);
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "Failed to add Customer. Please try again.");
+                JOptionPane.showMessageDialog(this, "Failed to add customer. Please try again.");
             }
             stmt.close();
             connection.close();
@@ -228,7 +233,6 @@ public class AddCustomer extends javax.swing.JFrame {
             Statement stmt = connection.createStatement();
             ResultSet result = stmt.executeQuery(query);
             if (result.next()) {
-                
                 name_field.setText(result.getString("name"));
                  phone_field1.setText(result.getString("phone"));
                 email_field2.setText(result.getString("email"));

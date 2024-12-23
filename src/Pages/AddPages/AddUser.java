@@ -1,31 +1,27 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package Pages.AddPages;
-
 import Database.DatabaseConnection;
 import Pages.AdminHome;
-import Pages.UserHome;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
-public class AddRoom extends javax.swing.JFrame {
-    
+public class AddUser extends javax.swing.JFrame {
     private int id = -1;
-    private boolean isAdmin = false;
-    public AddRoom(boolean isAdmin) {
-        this.isAdmin = isAdmin;
-        initComponents();
-    }
-    public AddRoom() {
+
+    public AddUser() {
         initComponents();
     }
 
-    public AddRoom(boolean isAdmin, int id) {
-        this.isAdmin = isAdmin;
+    public AddUser(int id) {
         initComponents();
         this.id = id;
         loadData();
     }
-    Connection connection = DatabaseConnection.getConnection();
 
+    Connection connection = DatabaseConnection.getConnection();
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -36,13 +32,11 @@ public class AddRoom extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        roomID_field = new javax.swing.JTextField();
-        price_field = new javax.swing.JTextField();
-        cancelRoom_btn = new javax.swing.JButton();
-        roomType_field = new javax.swing.JComboBox<>();
-        status_field = new javax.swing.JComboBox<>();
-        addRoom_btn = new javax.swing.JButton();
+        username_field = new javax.swing.JTextField();
+        password_field = new javax.swing.JTextField();
+        cancel_btn = new javax.swing.JButton();
+        role_field = new javax.swing.JComboBox<>();
+        done_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,7 +44,7 @@ public class AddRoom extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(248, 246, 227));
-        jLabel1.setText("ADD NEW ROOM");
+        jLabel1.setText("ADD NEW USER");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -74,44 +68,39 @@ public class AddRoom extends javax.swing.JFrame {
         jPanel2.setPreferredSize(new java.awt.Dimension(774, 278));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setText("Room Number");
+        jLabel2.setText("Username");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel3.setText("Room Type");
+        jLabel3.setText("Role");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel4.setText("Price");
+        jLabel4.setText("Password");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel5.setText("Status");
-
-        cancelRoom_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        cancelRoom_btn.setText("Cancel");
-        cancelRoom_btn.addActionListener(new java.awt.event.ActionListener() {
+        cancel_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cancel_btn.setText("Cancel");
+        cancel_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelRoom_btnActionPerformed(evt);
+                cancel_btnActionPerformed(evt);
             }
         });
 
-        roomType_field.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Single", "Double", "Suite" }));
-        roomType_field.addActionListener(new java.awt.event.ActionListener() {
+        role_field.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "User", "Admin", " " }));
+        role_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                roomType_fieldActionPerformed(evt);
+                role_fieldActionPerformed(evt);
             }
         });
 
-        status_field.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Occupied" }));
-
-        addRoom_btn.setBackground(new java.awt.Color(58, 79, 65));
-        addRoom_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        addRoom_btn.setForeground(new java.awt.Color(248, 246, 227));
-        addRoom_btn.setText("Done");
-        addRoom_btn.setMaximumSize(new java.awt.Dimension(77, 29));
-        addRoom_btn.setMinimumSize(new java.awt.Dimension(77, 29));
-        addRoom_btn.setPreferredSize(new java.awt.Dimension(77, 29));
-        addRoom_btn.addActionListener(new java.awt.event.ActionListener() {
+        done_btn.setBackground(new java.awt.Color(58, 79, 65));
+        done_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        done_btn.setForeground(new java.awt.Color(248, 246, 227));
+        done_btn.setText("Done");
+        done_btn.setMaximumSize(new java.awt.Dimension(77, 29));
+        done_btn.setMinimumSize(new java.awt.Dimension(77, 29));
+        done_btn.setPreferredSize(new java.awt.Dimension(77, 29));
+        done_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addRoom_btnActionPerformed(evt);
+                done_btnActionPerformed(evt);
             }
         });
 
@@ -123,26 +112,22 @@ public class AddRoom extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(addRoom_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(done_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cancelRoom_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cancel_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(5, 5, 5)
+                        .addGap(28, 28, 28)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(roomType_field, 0, 176, Short.MAX_VALUE)
-                            .addComponent(roomID_field))
-                        .addGap(35, 35, 35)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(price_field, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                            .addComponent(status_field, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(66, Short.MAX_VALUE))
+                            .addComponent(role_field, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(username_field, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(password_field, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,25 +136,19 @@ public class AddRoom extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel4)
-                    .addComponent(roomID_field, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(price_field, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(username_field, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(password_field, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(58, 58, 58)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5)))
+                        .addComponent(jLabel3))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(53, 53, 53)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(status_field)
-                                .addGap(1, 1, 1))
-                            .addComponent(roomType_field, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(50, 50, 50)
+                        .addComponent(role_field, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelRoom_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addRoom_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cancel_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(done_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(37, 37, 37))
         );
 
@@ -178,7 +157,7 @@ public class AddRoom extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,62 +171,54 @@ public class AddRoom extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void avallable_fieldActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
     private void loadData() {
-        String query = "SELECT * FROM rooms WHERE room_id = " + id;
+        String query = "SELECT * FROM user WHERE user_id = " + id;
         try {
             Statement stmt = connection.createStatement();
             ResultSet result = stmt.executeQuery(query);
             if (result.next()) {
-                roomID_field.setText(result.getString("room_id"));
-                roomType_field.setSelectedItem(result.getString("room_type"));
-                price_field.setText(result.getString("price"));
-                status_field.setSelectedItem(result.getString("status"));
+                username_field.setText(result.getString("username"));
+                role_field.setSelectedItem(result.getString("role"));
+                password_field.setText(result.getString("password"));
             }
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
         }
     }
-
-    private void cancelRoom_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelRoom_btnActionPerformed
+    
+    private void cancel_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_btnActionPerformed
         dispose();
         new AdminHome().setVisible(true);
-    }//GEN-LAST:event_cancelRoom_btnActionPerformed
+    }//GEN-LAST:event_cancel_btnActionPerformed
 
-    private void addRoom_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoom_btnActionPerformed
-        String room_id = roomID_field.getText();
-        String room_type = roomType_field.getSelectedItem().toString().toLowerCase();
-        String price = price_field.getText();
-        String status = status_field.getSelectedItem().toString().toLowerCase();
+    private void role_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_role_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_role_fieldActionPerformed
 
+    private void done_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_done_btnActionPerformed
+        String username = username_field.getText();
+        String password = password_field.getText();
+        String role = role_field.getSelectedItem().toString().toLowerCase();
+       
         String query;
         if (id == -1) {
-            query = "INSERT INTO rooms (room_id, room_type, price, status) VALUES (?, ?, ?, ?)";
+            query = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
         } else {
-            query = "UPDATE rooms SET room_id = ?, room_type = ?, price = ?, status = ? WHERE room_id = " + id;
+            query = "UPDATE rooms SET username = ?, password = ?, role = ? WHERE user_id = " + id;
         }
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, room_id);
-            stmt.setString(2, room_type);
-            stmt.setString(3, price);
-            stmt.setString(4, status);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.setString(3, role);
             int rowsInserted = stmt.executeUpdate();
 
             if (rowsInserted > 0) {
-                JOptionPane.showMessageDialog(this, "Room added successfully!");
-                if (isAdmin) {
-                    dispose();
-                    new AdminHome().setVisible(true);
-                } else {
-                    dispose();
-                    new UserHome().setVisible(true);
-                }
+                JOptionPane.showMessageDialog(this, "User added successfully!");
+                dispose();
+                new AdminHome().setVisible(true);
             } else {
-                JOptionPane.showMessageDialog(this, "Failed to add room. Please try again.");
+                JOptionPane.showMessageDialog(this, "Failed to add user. Please try again.");
             }
             stmt.close();
             connection.close();
@@ -255,12 +226,7 @@ public class AddRoom extends javax.swing.JFrame {
             System.out.println("Error: " + ex.getMessage());
         }
 
-
-    }//GEN-LAST:event_addRoom_btnActionPerformed
-
-    private void roomType_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roomType_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_roomType_fieldActionPerformed
+    }//GEN-LAST:event_done_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -279,44 +245,35 @@ public class AddRoom extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddRoom.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddRoom.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddRoom.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddRoom.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
             public void run() {
-                new AddRoom().setVisible(true);
+                new AddUser().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addRoom_btn;
-    private javax.swing.JButton cancelRoom_btn;
+    private javax.swing.JButton cancel_btn;
+    private javax.swing.JButton done_btn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField price_field;
-    private javax.swing.JTextField roomID_field;
-    private javax.swing.JComboBox<String> roomType_field;
-    private javax.swing.JComboBox<String> status_field;
+    private javax.swing.JTextField password_field;
+    private javax.swing.JComboBox<String> role_field;
+    private javax.swing.JTextField username_field;
     // End of variables declaration//GEN-END:variables
-
-    public static class setVisible {
-
-        public setVisible(boolean b) {
-        }
-    }
 }

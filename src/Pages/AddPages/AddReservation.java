@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Pages.AddPages;
 
 import Database.DatabaseConnection;
 import Pages.AdminHome;
+import Pages.UserHome;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import java.util.List;
@@ -16,7 +12,19 @@ public class AddReservation extends javax.swing.JFrame {
 
     Connection connection = DatabaseConnection.getConnection();
     private int id = -1;
-
+    private boolean isAdmin = false;
+    public AddReservation(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+        initComponents();
+        List<String> availableRooms = getAvailableRooms();
+        List<String> customers = getCustomers();
+        for (String room : availableRooms) {
+            room_field.addItem(room);
+        }
+        for (String customer : customers) {
+            customer_field.addItem(customer);
+        }
+    }
     public AddReservation() {
         initComponents();
         List<String> availableRooms = getAvailableRooms();
@@ -29,7 +37,8 @@ public class AddReservation extends javax.swing.JFrame {
         }
     }
 
-    public AddReservation(int id) {
+    public AddReservation(boolean isAdmin, int id) {
+        this.isAdmin = isAdmin;
         initComponents();
         this.id = id;
         List<String> availableRooms = getAvailableRooms();
@@ -247,8 +256,13 @@ public class AddReservation extends javax.swing.JFrame {
                 updateStmt.setString(1, room_id);
                 updateStmt.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Reservation added successfully!");
-                dispose();
-                new AdminHome().setVisible(true);
+                if (isAdmin) {
+                    dispose();
+                    new AdminHome().setVisible(true);
+                } else {
+                    dispose();
+                    new UserHome().setVisible(true);
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "Failed to add reservation. Please try again.");
             }

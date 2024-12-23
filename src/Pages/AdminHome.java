@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Pages;
 
 import Database.DatabaseConnection;
@@ -9,45 +5,10 @@ import Pages.AddPages.AddEmployee;
 import Pages.AddPages.AddRoom;
 import Pages.AddPages.AddCustomer;
 import Pages.AddPages.AddReservation;
+import Pages.AddPages.AddUser;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.*;
-
-class RoomsTableRenderer extends DefaultTableCellRenderer {
-
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        // Get the default rendering component
-        Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        // Softer colors with custom RGB values
-        Color softRed = new Color(255, 102, 102); // Light Red
-        Color softGreen = new Color(102, 255, 102); // Light Green
-        // Check if the column is the "Status" column
-        int statusColumnIndex = 3;
-        if (column == statusColumnIndex) {
-            String status = (String) value;
-
-            // Change the background color based on the status
-            if ("occupied".equalsIgnoreCase(status)) {
-                cell.setBackground(softRed);
-                cell.setForeground(Color.WHITE);
-            } else if ("available".equalsIgnoreCase(status)) {
-                cell.setBackground(softGreen);
-                cell.setForeground(Color.BLACK);
-            } else {
-                cell.setBackground(Color.WHITE);
-                cell.setForeground(Color.BLACK);
-            }
-        } else {
-            cell.setBackground(Color.WHITE);
-            cell.setForeground(Color.BLACK);
-        }
-
-        return cell;
-    }
-}
 
 public class AdminHome extends javax.swing.JFrame {
 
@@ -97,7 +58,7 @@ public class AdminHome extends javax.swing.JFrame {
         users_page = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         search_user_btn = new javax.swing.JButton();
-        search_field1 = new javax.swing.JTextField();
+        user_search = new javax.swing.JTextField();
         add_user_btn = new javax.swing.JButton();
         edit_user_btn = new javax.swing.JButton();
         delete_user_btn = new javax.swing.JButton();
@@ -602,7 +563,7 @@ public class AdminHome extends javax.swing.JFrame {
             }
         });
 
-        search_field1.setText("Search ..");
+        user_search.setText("Search ..");
 
         add_user_btn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         add_user_btn.setForeground(new java.awt.Color(58, 79, 65));
@@ -662,7 +623,7 @@ public class AdminHome extends javax.swing.JFrame {
                     .addGroup(users_pageLayout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(32, 32, 32)
-                        .addComponent(search_field1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(user_search, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(users_pageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -681,7 +642,7 @@ public class AdminHome extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(users_pageLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(search_field1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(user_search, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(users_pageLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(search_user_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1161,19 +1122,38 @@ public class AdminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_employees_pageComponentShown
 
     private void search_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_user_btnActionPerformed
-        // TODO add your handling code here:
+       String search_value = user_search.getText();
+        users_table.setModel(getSearchResult(search_value, "users", "username"));
     }//GEN-LAST:event_search_user_btnActionPerformed
 
     private void add_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_user_btnActionPerformed
-        // TODO add your handling code here:
+        dispose();
+        new AddUser().setVisible(true);
     }//GEN-LAST:event_add_user_btnActionPerformed
 
     private void edit_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_user_btnActionPerformed
-        // TODO add your handling code here:
+        int selectedRow = users_table.getSelectedRow();
+        if (selectedRow != -1) {
+            int id = (Integer) users_table.getValueAt(selectedRow, 0);
+            dispose();
+            new AddUser(id).setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a row to edit.");
+        }
     }//GEN-LAST:event_edit_user_btnActionPerformed
 
     private void delete_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_user_btnActionPerformed
-        // TODO add your handling code here:
+        int selectedRow = users_table.getSelectedRow();
+        if (selectedRow != -1) {
+            int pk = (Integer) users_table.getValueAt(selectedRow, 0);
+            int response = JOptionPane.showConfirmDialog(this, "Are you sure?", "Delete record", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (response == JOptionPane.YES_OPTION) {
+                deleteRow("users", "user_id", pk);
+                users_table.setModel(loadTableData("users"));
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a row to delete.");
+        }
     }//GEN-LAST:event_delete_user_btnActionPerformed
 
     private void users_pageComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_users_pageComponentShown
@@ -1205,7 +1185,7 @@ public class AdminHome extends javax.swing.JFrame {
 
     private void add_roomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_roomActionPerformed
         dispose();
-        new AddRoom().setVisible(true);
+        new AddRoom(true).setVisible(true);
     }//GEN-LAST:event_add_roomActionPerformed
 
     private void search_roomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_roomActionPerformed
@@ -1232,7 +1212,7 @@ public class AdminHome extends javax.swing.JFrame {
         if (selectedRow != -1) {
             int id = (Integer) rooms_table.getValueAt(selectedRow, 0);
             dispose();
-            new AddRoom(id).setVisible(true);
+            new AddRoom(true, id).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Please select a row to edit.");
         }
@@ -1271,7 +1251,7 @@ public class AdminHome extends javax.swing.JFrame {
 
     private void add_custActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_custActionPerformed
         dispose();
-        new AddCustomer().setVisible(true);
+        new AddCustomer(true).setVisible(true);
     }//GEN-LAST:event_add_custActionPerformed
 
     private void edit_custActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_custActionPerformed
@@ -1279,7 +1259,7 @@ public class AdminHome extends javax.swing.JFrame {
         if (selectedRow != -1) {
             int id = (Integer) customers_table.getValueAt(selectedRow, 0);
             dispose();
-            new AddCustomer(id).setVisible(true);
+            new AddCustomer(true, id).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Please select a row to edit.");
         }
@@ -1343,7 +1323,7 @@ public class AdminHome extends javax.swing.JFrame {
 
     private void add_reserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_reserActionPerformed
         dispose();
-        new AddReservation().setVisible(true);
+        new AddReservation(true).setVisible(true);
     }//GEN-LAST:event_add_reserActionPerformed
 
     private void edit_reserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_reserActionPerformed
@@ -1351,7 +1331,7 @@ public class AdminHome extends javax.swing.JFrame {
         if (selectedRow != -1) {
             int id = (Integer) reservations_table1.getValueAt(selectedRow, 0);
             dispose();
-            new AddReservation(id).setVisible(true);
+            new AddReservation(true, id).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Please select a row to edit.");
         }
@@ -1602,7 +1582,6 @@ public class AdminHome extends javax.swing.JFrame {
     private javax.swing.JButton search_cust;
     private javax.swing.JButton search_emp;
     private javax.swing.JTextField search_field;
-    private javax.swing.JTextField search_field1;
     private javax.swing.JTextField search_field_customer;
     private javax.swing.JTextField search_field_reservations;
     private javax.swing.JTextField search_field_room;
@@ -1611,6 +1590,7 @@ public class AdminHome extends javax.swing.JFrame {
     private javax.swing.JButton search_user_btn;
     private javax.swing.JButton signout_btn;
     private javax.swing.JButton use_dashboard;
+    private javax.swing.JTextField user_search;
     private javax.swing.JButton users_btn;
     private javax.swing.JPanel users_page;
     private javax.swing.JTable users_table;
