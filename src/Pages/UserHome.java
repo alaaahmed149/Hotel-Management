@@ -1,5 +1,6 @@
 package Pages;
 
+import Database.CurrentUser;
 import Database.DatabaseConnection;
 import Pages.AddPages.AddRoom;
 import Pages.AddPages.AddCustomer;
@@ -8,11 +9,11 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-
 public class UserHome extends javax.swing.JFrame {
 
     public UserHome() {
         initComponents();
+        current_user.setText(CurrentUser.getUsername());
     }
     Connection connection = DatabaseConnection.getConnection();
 
@@ -24,6 +25,7 @@ public class UserHome extends javax.swing.JFrame {
         TopNav = new javax.swing.JPanel();
         Header = new javax.swing.JLabel();
         signout_btn = new javax.swing.JButton();
+        current_user = new javax.swing.JLabel();
         SideBar = new javax.swing.JPanel();
         rooms_btn = new javax.swing.JButton();
         customers_btn = new javax.swing.JButton();
@@ -100,6 +102,17 @@ public class UserHome extends javax.swing.JFrame {
             }
         });
 
+        current_user.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        current_user.setForeground(new java.awt.Color(248, 246, 227));
+        current_user.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        current_user.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/profile-user.png"))); // NOI18N
+        current_user.setText("  username");
+        current_user.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                current_userComponentShown(evt);
+            }
+        });
+
         javax.swing.GroupLayout TopNavLayout = new javax.swing.GroupLayout(TopNav);
         TopNav.setLayout(TopNavLayout);
         TopNavLayout.setHorizontalGroup(
@@ -107,15 +120,19 @@ public class UserHome extends javax.swing.JFrame {
             .addGroup(TopNavLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(Header, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 550, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 406, Short.MAX_VALUE)
+                .addComponent(current_user, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(signout_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37))
         );
         TopNavLayout.setVerticalGroup(
             TopNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TopNavLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(signout_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addGroup(TopNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(signout_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(current_user, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TopNavLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -642,6 +659,7 @@ public class UserHome extends javax.swing.JFrame {
     private void signout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signout_btnActionPerformed
         int response = JOptionPane.showConfirmDialog(this, "Are you sure?", "SIGN OUT", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
+            CurrentUser.clearUser();
             dispose();
             new SignIn().setVisible(true);
         }
@@ -744,7 +762,7 @@ public class UserHome extends javax.swing.JFrame {
     }//GEN-LAST:event_delete_custActionPerformed
 
     private void rooms_pageComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_rooms_pageComponentShown
-         rooms_table.setModel(loadTableData("rooms"));
+        rooms_table.setModel(loadTableData("rooms"));
         try {
             String updateStatus = "UPDATE rooms SET status = 'available' WHERE room_id NOT IN (SELECT DISTINCT room_id FROM reservations)";
             PreparedStatement updateStmt = connection.prepareStatement(updateStatus);
@@ -870,6 +888,10 @@ public class UserHome extends javax.swing.JFrame {
         Main.repaint();
         Main.revalidate();
     }//GEN-LAST:event_reser_dashboardActionPerformed
+
+    private void current_userComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_current_userComponentShown
+
+    }//GEN-LAST:event_current_userComponentShown
 
     private int countRows(String table_name, String pk) {
         int count = 0;
@@ -998,6 +1020,7 @@ public class UserHome extends javax.swing.JFrame {
     private javax.swing.JButton add_cust;
     private javax.swing.JButton add_reser;
     private javax.swing.JButton add_room;
+    private javax.swing.JLabel current_user;
     private javax.swing.JButton cust_dashboard;
     private javax.swing.JLabel customer_page;
     private javax.swing.JLabel customer_page1;

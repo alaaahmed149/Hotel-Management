@@ -1,5 +1,6 @@
 package Pages;
 
+import Database.CurrentUser;
 import Database.DatabaseConnection;
 import java.sql.*;
 import javax.swing.JOptionPane;
@@ -149,14 +150,18 @@ public class SignIn extends javax.swing.JFrame {
                 stmt.setString(2, password);
                 ResultSet result = stmt.executeQuery();
                 if (result.next()) {
+                    int userId = result.getInt("user_id");
+                    CurrentUser.setUser(username, userId);
                     if (result.getString("role").equals("admin")) {
                         dispose();
                         new AdminHome().setVisible(true);
-                    } else {
+                    } else if (result.getString("role").equals("user")){
                         dispose();
                         new UserHome().setVisible(true);
                     }
-                }
+                }  else {
+                         JOptionPane.showMessageDialog(this, "Username or password might be wrong, try again.");   
+                    }
             } catch (SQLException ex) {
                 System.out.println("Something went wrong: " + ex.getMessage());
             } 

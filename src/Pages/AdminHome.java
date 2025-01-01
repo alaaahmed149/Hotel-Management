@@ -1,5 +1,6 @@
 package Pages;
 
+import Database.CurrentUser;
 import Database.DatabaseConnection;
 import Pages.AddPages.AddEmployee;
 import Pages.AddPages.AddRoom;
@@ -14,6 +15,7 @@ public class AdminHome extends javax.swing.JFrame {
 
     public AdminHome() {
         initComponents();
+        current_user.setText(CurrentUser.getUsername());
     }
 
     Connection connection = DatabaseConnection.getConnection();
@@ -27,6 +29,7 @@ public class AdminHome extends javax.swing.JFrame {
         TopNav = new javax.swing.JPanel();
         Header = new javax.swing.JLabel();
         signout_btn = new javax.swing.JButton();
+        current_user = new javax.swing.JLabel();
         SideBar = new javax.swing.JPanel();
         employees_btn = new javax.swing.JButton();
         users_btn = new javax.swing.JButton();
@@ -141,6 +144,17 @@ public class AdminHome extends javax.swing.JFrame {
             }
         });
 
+        current_user.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        current_user.setForeground(new java.awt.Color(248, 246, 227));
+        current_user.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        current_user.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/profile-user.png"))); // NOI18N
+        current_user.setText("  username");
+        current_user.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                current_userComponentShown(evt);
+            }
+        });
+
         javax.swing.GroupLayout TopNavLayout = new javax.swing.GroupLayout(TopNav);
         TopNav.setLayout(TopNavLayout);
         TopNavLayout.setHorizontalGroup(
@@ -149,6 +163,8 @@ public class AdminHome extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addComponent(Header, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(current_user, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(signout_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37))
         );
@@ -156,7 +172,9 @@ public class AdminHome extends javax.swing.JFrame {
             TopNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TopNavLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(signout_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(TopNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(signout_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(current_user))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TopNavLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1066,6 +1084,7 @@ public class AdminHome extends javax.swing.JFrame {
     private void signout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signout_btnActionPerformed
         int response = JOptionPane.showConfirmDialog(this, "Are you sure?", "SIGN OUT", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
+            CurrentUser.clearUser();
             dispose();
             new SignIn().setVisible(true);
         }
@@ -1122,7 +1141,7 @@ public class AdminHome extends javax.swing.JFrame {
     }//GEN-LAST:event_employees_pageComponentShown
 
     private void search_user_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_user_btnActionPerformed
-       String search_value = user_search.getText();
+        String search_value = user_search.getText();
         users_table.setModel(getSearchResult(search_value, "users", "username"));
     }//GEN-LAST:event_search_user_btnActionPerformed
 
@@ -1410,6 +1429,10 @@ public class AdminHome extends javax.swing.JFrame {
         Main.revalidate();
     }//GEN-LAST:event_reser_dashboardActionPerformed
 
+    private void current_userComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_current_userComponentShown
+
+    }//GEN-LAST:event_current_userComponentShown
+
     private int countRows(String table_name, String pk) {
         int count = 0;
         try {
@@ -1536,6 +1559,7 @@ public class AdminHome extends javax.swing.JFrame {
     private javax.swing.JButton add_reser;
     private javax.swing.JButton add_room;
     private javax.swing.JButton add_user_btn;
+    private javax.swing.JLabel current_user;
     private javax.swing.JButton cust_dashboard;
     private javax.swing.JLabel customer_page;
     private javax.swing.JLabel customer_page1;
