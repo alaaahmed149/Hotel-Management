@@ -4,8 +4,10 @@
  */
 package Pages.AddPages;
 
+import Database.CurrentUser;
 import Database.DatabaseConnection;
 import Pages.AdminHome;
+import Utilities.LoggerUtil;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
@@ -198,7 +200,7 @@ public class AddEmployee extends javax.swing.JFrame {
                 position_field.setSelectedItem(result.getString("position"));
             }
         } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+            LoggerUtil.logError(this.getClass(), "Failed to load employee's data. ", ex);
         }
     }
     private void done_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_done_btnActionPerformed
@@ -222,6 +224,7 @@ public class AddEmployee extends javax.swing.JFrame {
 
             if (rowsInserted > 0) {
                 JOptionPane.showMessageDialog(this, "Employee added successfully!");
+                LoggerUtil.logAction(this.getClass(), CurrentUser.getUsername() + " has updated employees.");
                 dispose();
                 new AdminHome().setVisible(true);
             } else {
@@ -229,8 +232,8 @@ public class AddEmployee extends javax.swing.JFrame {
             }
             stmt.close();
             connection.close();
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to add employee. ", ex);
         }
     }//GEN-LAST:event_done_btnActionPerformed
 

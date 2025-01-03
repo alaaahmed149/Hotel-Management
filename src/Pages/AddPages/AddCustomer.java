@@ -1,8 +1,10 @@
 package Pages.AddPages;
 
+import Database.CurrentUser;
 import Database.DatabaseConnection;
 import Pages.AdminHome;
 import Pages.UserHome;
+import Utilities.LoggerUtil;
 import java.sql.*;
 import javax.swing.JOptionPane;
 public class AddCustomer extends javax.swing.JFrame {
@@ -201,6 +203,7 @@ public class AddCustomer extends javax.swing.JFrame {
 
             if (rowsInserted > 0) {
                 JOptionPane.showMessageDialog(this, "Customer added successfully!");
+                LoggerUtil.logAction(this.getClass(), CurrentUser.getUsername() + " has updated customers.");
                 if (isAdmin) {
                     dispose();
                     new AdminHome().setVisible(true);
@@ -213,8 +216,8 @@ public class AddCustomer extends javax.swing.JFrame {
             }
             stmt.close();
             connection.close();
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to add customer. ", ex);
         }
 
     }//GEN-LAST:event_AddCustomer_btnActionPerformed
@@ -238,7 +241,7 @@ public class AddCustomer extends javax.swing.JFrame {
                 email_field2.setText(result.getString("email"));
             }
         } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+            LoggerUtil.logError(this.getClass(), "Failed to load customer's data. ", ex);
         }
     }
     public static void main(String args[]) {

@@ -1,8 +1,10 @@
 package Pages.AddPages;
 
+import Database.CurrentUser;
 import Database.DatabaseConnection;
 import Pages.AdminHome;
 import Pages.UserHome;
+import Utilities.LoggerUtil;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
@@ -207,8 +209,8 @@ public class AddRoom extends javax.swing.JFrame {
                 price_field.setText(result.getString("price"));
                 status_field.setSelectedItem(result.getString("status"));
             }
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to load room's data. ", ex);
         }
     }
 
@@ -239,6 +241,7 @@ public class AddRoom extends javax.swing.JFrame {
 
             if (rowsInserted > 0) {
                 JOptionPane.showMessageDialog(this, "Room added successfully!");
+                LoggerUtil.logAction(this.getClass(), CurrentUser.getUsername() + " has updated rooms.");
                 if (isAdmin) {
                     dispose();
                     new AdminHome().setVisible(true);
@@ -251,8 +254,8 @@ public class AddRoom extends javax.swing.JFrame {
             }
             stmt.close();
             connection.close();
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to add room. ", ex);
         }
 
 

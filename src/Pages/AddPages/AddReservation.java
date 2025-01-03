@@ -1,8 +1,10 @@
 package Pages.AddPages;
 
+import Database.CurrentUser;
 import Database.DatabaseConnection;
 import Pages.AdminHome;
 import Pages.UserHome;
+import Utilities.LoggerUtil;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import java.util.List;
@@ -256,6 +258,7 @@ public class AddReservation extends javax.swing.JFrame {
                 updateStmt.setString(1, room_id);
                 updateStmt.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Reservation added successfully!");
+                LoggerUtil.logAction(this.getClass(), CurrentUser.getUsername() + " has updated reservations.");
                 if (isAdmin) {
                     dispose();
                     new AdminHome().setVisible(true);
@@ -268,8 +271,8 @@ public class AddReservation extends javax.swing.JFrame {
             }
             stmt.close();
             connection.close();
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to load reservation's data. ", ex);
         }
 
     }//GEN-LAST:event_addReservation_btnActionPerformed
@@ -293,8 +296,8 @@ public class AddReservation extends javax.swing.JFrame {
             room_field.setSelectedItem(result.getString("room_id"));
             checkIn_field.setText(result.getString("check_in_date"));
             checkOut_field.setText(result.getString("check_out_date"));
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to load reservation's data. ", ex);
         }
     }
     private void checkIn_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkIn_fieldActionPerformed
@@ -315,8 +318,8 @@ public class AddReservation extends javax.swing.JFrame {
                 String room = String.valueOf(rs.getInt("room_id"));
                 availableRooms.add(room);
             }
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to load available rooms. ", ex);
         }
         return availableRooms;
     }
@@ -331,8 +334,8 @@ public class AddReservation extends javax.swing.JFrame {
                 String room = rs.getString("name");
                 customers.add(room);
             }
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to get customers data. ", ex);
         }
         return customers;
     }

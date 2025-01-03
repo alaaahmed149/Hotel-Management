@@ -3,8 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Pages.AddPages;
+import Database.CurrentUser;
 import Database.DatabaseConnection;
 import Pages.AdminHome;
+import Utilities.LoggerUtil;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
@@ -181,8 +183,8 @@ public class AddUser extends javax.swing.JFrame {
                 role_field.setSelectedItem(result.getString("role"));
                 password_field.setText(result.getString("password"));
             }
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to load user's data. ", ex);
         }
     }
     
@@ -215,6 +217,7 @@ public class AddUser extends javax.swing.JFrame {
 
             if (rowsInserted > 0) {
                 JOptionPane.showMessageDialog(this, "User added successfully!");
+                LoggerUtil.logAction(this.getClass(), CurrentUser.getUsername() + " has updated users.");
                 dispose();
                 new AdminHome().setVisible(true);
             } else {
@@ -222,8 +225,8 @@ public class AddUser extends javax.swing.JFrame {
             }
             stmt.close();
             connection.close();
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to add user. ", ex);
         }
 
     }//GEN-LAST:event_done_btnActionPerformed

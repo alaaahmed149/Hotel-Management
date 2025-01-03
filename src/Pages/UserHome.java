@@ -5,6 +5,7 @@ import Database.DatabaseConnection;
 import Pages.AddPages.AddRoom;
 import Pages.AddPages.AddCustomer;
 import Pages.AddPages.AddReservation;
+import Utilities.LoggerUtil;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -659,6 +660,7 @@ public class UserHome extends javax.swing.JFrame {
     private void signout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signout_btnActionPerformed
         int response = JOptionPane.showConfirmDialog(this, "Are you sure?", "SIGN OUT", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
+            LoggerUtil.logAction(this.getClass(), CurrentUser.getUsername() + " has signed out.");
             CurrentUser.clearUser();
             dispose();
             new SignIn().setVisible(true);
@@ -702,6 +704,7 @@ public class UserHome extends javax.swing.JFrame {
             int response = JOptionPane.showConfirmDialog(this, "Are you sure?", "Delete record", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (response == JOptionPane.YES_OPTION) {
                 deleteRow("rooms", "room_id", pk);
+                LoggerUtil.logAction(this.getClass(), CurrentUser.getUsername() + " has deleted a room.");
                 rooms_table.setModel(loadTableData("rooms"));
             }
         } else {
@@ -754,6 +757,7 @@ public class UserHome extends javax.swing.JFrame {
             int response = JOptionPane.showConfirmDialog(this, "Are you sure?", "Delete record", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (response == JOptionPane.YES_OPTION) {
                 deleteRow("customers", "customer_id", pk);
+                LoggerUtil.logAction(this.getClass(), CurrentUser.getUsername() + " has deleted a customer.");
                 customers_table.setModel(loadTableData("customers"));
             }
         } else {
@@ -771,8 +775,8 @@ public class UserHome extends javax.swing.JFrame {
                 rooms_table.setModel(loadTableData("rooms"));
                 rooms_table.getColumnModel().getColumn(3).setCellRenderer(new RoomsTableRenderer());
             }
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to update rooms page. ", ex);
         }
         rooms_table.getColumnModel().getColumn(3).setCellRenderer(new RoomsTableRenderer());
     }//GEN-LAST:event_rooms_pageComponentShown
@@ -811,6 +815,7 @@ public class UserHome extends javax.swing.JFrame {
             int response = JOptionPane.showConfirmDialog(this, "Are you sure?", "Delete record", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (response == JOptionPane.YES_OPTION) {
                 deleteRow("reservations", "reservations_id", pk);
+                LoggerUtil.logAction(this.getClass(), CurrentUser.getUsername() + " has deleted a reservation.");
                 try {
                     String room_id = reservations_table1.getValueAt(selectedRow, 2).toString();
                     String updateStatus = "UPDATE rooms SET status = 'available' WHERE room_id = ?";
@@ -821,8 +826,8 @@ public class UserHome extends javax.swing.JFrame {
                         rooms_table.setModel(loadTableData("rooms"));
                         rooms_table.getColumnModel().getColumn(3).setCellRenderer(new RoomsTableRenderer());
                     }
-                } catch (SQLException ex) {
-                    System.out.println("Error: " + ex.getMessage());
+                } catch (Exception ex) {
+                    LoggerUtil.logError(this.getClass(), "Failed to upate reservations page. ", ex);
                 }
                 reservations_table1.setModel(loadTableData("reservations"));
             }
@@ -901,8 +906,8 @@ public class UserHome extends javax.swing.JFrame {
             ResultSet rs = stmt.executeQuery();
             rs.next();
             count = rs.getInt("result");
-        } catch (SQLException ex) {
-            System.out.println("Error in fetching count: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to count " + table_name + "'s rows . ", ex);
         }
         return count;
     }
@@ -926,8 +931,8 @@ public class UserHome extends javax.swing.JFrame {
                 model.addRow(row);
             }
             stmt.close();
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to get " + table_name + " table. ", ex);
         }
         return model;
     }
@@ -951,8 +956,8 @@ public class UserHome extends javax.swing.JFrame {
                 model.addRow(row);
             }
             stmt.close();
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to get " + table_name + "'s search result. ", ex);
         }
         return model;
     }
@@ -970,8 +975,8 @@ public class UserHome extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Something went wrong, please try again.");
             }
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        } catch (Exception ex) {
+            LoggerUtil.logError(this.getClass(), "Failed to delete " + table_name + " selected row. ", ex);
         }
     }
 

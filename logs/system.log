@@ -1,0 +1,12 @@
+[2025-01-03 13:28:15] : [INFO] : [Class: class Pages.SignIn Action: alaaahmed has logged in.]
+[2025-01-03 13:45:59] : [INFO] : [Class: class Pages.SignIn Action: alaaahmed has logged in.]
+[2025-01-03 13:47:11] : [INFO] : [Class: class Pages.AddPages.AddCustomer Action: alaaahmed has updated customers.]
+[2025-01-03 13:47:45] : [INFO] : [Class: class Pages.AddPages.AddReservation Action: alaaahmed has updated reservations.]
+[2025-01-03 13:48:04] : [INFO] : [Class: class Pages.AdminHome Action: alaaahmed has signed out.]
+[2025-01-03 13:48:43] : [INFO] : [Class: class Pages.SignIn Action: alaaahmed has logged in.]
+[2025-01-03 13:49:02] : [ERROR] : [Class: class Pages.AdminHome Error: Failed to get rooms table.  com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 19,055 milliseconds ago. The last packet sent successfully to the server was 19,055 milliseconds ago.]
+[2025-01-03 13:49:02] : [ERROR] : [Class: class Pages.AdminHome Error: Failed to update rooms page.  java.sql.SQLNonTransientConnectionException: No operations allowed after connection closed.]
+[2025-01-03 13:54:49] : [INFO] : [Class: class Pages.SignIn Action: alaaahmed has logged in.]
+[2025-01-03 13:55:22] : [INFO] : [Class: class Pages.AdminHome Action: alaaahmed has signed out.]

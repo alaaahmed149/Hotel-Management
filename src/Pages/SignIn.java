@@ -2,6 +2,7 @@ package Pages;
 
 import Database.CurrentUser;
 import Database.DatabaseConnection;
+import Utilities.LoggerUtil;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
@@ -153,6 +154,7 @@ public class SignIn extends javax.swing.JFrame {
                     int userId = result.getInt("user_id");
                     CurrentUser.setUser(username, userId);
                     if (result.getString("role").equals("admin")) {
+                        LoggerUtil.logAction(this.getClass(), username + " has logged in."); 
                         dispose();
                         new AdminHome().setVisible(true);
                     } else if (result.getString("role").equals("user")){
@@ -162,7 +164,7 @@ public class SignIn extends javax.swing.JFrame {
                 }  else {
                          JOptionPane.showMessageDialog(this, "Username or password might be wrong, try again.");   
                     }
-            } catch (SQLException ex) {
+            } catch (Exception ex) {
                 System.out.println("Something went wrong: " + ex.getMessage());
             } 
         }
